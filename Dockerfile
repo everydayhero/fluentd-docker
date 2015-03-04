@@ -21,5 +21,5 @@ ADD fluent.conf.erb /etc/fluent/
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 5160
+EXPOSE 5170
 CMD ["/usr/local/bundle/bin/fluentd", "-c", "/etc/fluent/fluent.conf"]

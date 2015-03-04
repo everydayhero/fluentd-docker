@@ -1,9 +1,9 @@
 # Fluentd-docker
 
-This kicks off the unified log-collector we discussed last week. Currently, it is designed to accept JSON input over UDP, such as that which may be forwarded by [journalctl](http://www.freedesktop.org/software/systemd/man/journalctl.html).
+This kicks off the unified log-collector we discussed last week. Currently, it is designed to accept JSON input over TCP, such as that which may be forwarded by [journalctl](http://www.freedesktop.org/software/systemd/man/journalctl.html).
 
 ```
-journalctl -o json -f | ncat -u localhost 5160
+journalctl -o json -f | ncat localhost 5170
 ```
 
 Once out of POC stage, we'll want to get this into a unit file of its own. The anticipated complications with this will be around non-root access to the journal, and teaching ncat to ignore connection errors.
@@ -12,9 +12,10 @@ To start the forwarder, clone this repo, then build the docker image (it is not 
 
 ```sh
 docker build -t fluentd .
+
 docker run \
   --rm -it \
-  -p 5160:5160/udp \
+  -p 5170:5170 \
   -e "ELASTICSEARCH_HOST=foo" \
   -e "ELASTICSEARCH_PORT=foo" \
   -e "LOGGLY_TOKEN=foo" \
@@ -24,3 +25,4 @@ docker run \
   -e "S3_ENDPOINT=foo" \
   -e "S3_PATH=foo" \
   fluentd
+```
