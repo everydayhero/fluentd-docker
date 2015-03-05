@@ -16,6 +16,7 @@ docker build -t fluentd .
 docker run \
   --rm -it \
   -p 5170:5170 \
+  -p 5140:5140/udp \
   -e "ELASTICSEARCH_HOST=foo" \
   -e "ELASTICSEARCH_PORT=foo" \
   -e "LOGGLY_TOKEN=foo" \

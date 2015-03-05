@@ -15,8 +15,9 @@ RUN gem install \
     fluent-plugin-elasticsearch \
     --no-rdoc --no-ri
 
-RUN mkdir /etc/fluent
+RUN mkdir -p /etc/fluent/plugin
 ADD fluent.conf.erb /etc/fluent/
+ADD plugins/* /etc/fluent/plugin/
 
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]

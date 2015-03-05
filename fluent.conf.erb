@@ -6,6 +6,14 @@
   bind 0.0.0.0
 </source>
 
+<source>
+  type syslog
+  port 5140
+  bind 0.0.0.0
+  tag system
+  format everydayhero
+</source>
+
 <match **>
   type copy
 
