@@ -64,8 +64,8 @@ class Everydayhero < Fluent::Parser
             result = JSON.parse(value)
             payload = JSONFlattener.call(result)
             record.merge!(payload)
-          # rescue JSON::ParserError
-          #   record[name] = value
+          rescue JSON::ParserError
+            record[name] = value
           end
         else
           record[name] = value
