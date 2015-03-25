@@ -34,7 +34,12 @@ class JournalCtl < Fluent::Parser
   def parse(text)
     output = {}
     json = JSON.parse(text)
-    time = nil
+
+    if @estimate_current_event
+      time = Fluent::Engine.now
+    else
+      time = nil
+    end
 
     json.each do |key, value|
       output_key = key.gsub(/^_+/,'').gsub(/^/,'journalctl.').downcase
@@ -57,3 +62,4 @@ class JournalCtl < Fluent::Parser
     end
   end
 end
+
