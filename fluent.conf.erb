@@ -17,7 +17,14 @@
 <match **>
   type copy
 
-  <% if ENV["ELASTICSEARCH_HOST"] %>
+  <% if ENV["ELASTICSEARCH_HOSTS"] %>
+    <store>
+      type elasticsearch
+      logstash_format true
+      hosts <%= ENV["ELASTICSEARCH_HOSTS"] %>
+      flush_interval 10
+    </store>
+  <% elsif ENV["ELASTICSEARCH_HOST"] %>
     <store>
       type elasticsearch
       logstash_format true
