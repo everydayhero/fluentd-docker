@@ -48,3 +48,21 @@
     </store>
   <% end %>
 </match>
+
+<% if ENV["KINESIS_STREAM"] %>
+  <match **>
+    type kinesis
+
+    stream_name <%= ENV["KINESIS_STREAM"] %>
+
+    <% if ENV["AWS_KEY"] %>aws_key_id <%= ENV["AWS_KEY"] %><% end %>
+    <% if ENV["AWS_SECRET"] %>aws_sec_key <%= ENV["AWS_SECRET"] %><% end %>
+
+    <% if ENV["AWS_REGION"] %>region <%= ENV["AWS_REGION"] %><% end %>
+
+    random_partition_key true
+
+    order_events false
+    num_threads 10
+  </match>
+<% end %>
