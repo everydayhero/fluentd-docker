@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN gem install \
     fluent-plugin-s3 \
-    fluent-plugin-loggly \
     fluent-plugin-elasticsearch \
+    fluent-plugin-kinesis \
     --no-rdoc --no-ri
 
 RUN mkdir -p /etc/fluent/plugin
