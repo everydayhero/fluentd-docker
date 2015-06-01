@@ -11,7 +11,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN gem install \
     fluent-plugin-s3 \
-    fluent-plugin-loggly \
     fluent-plugin-elasticsearch \
     --no-rdoc --no-ri
 
