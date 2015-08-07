@@ -27,9 +27,4 @@ class NginxEnricher
       value
     end
   end
-
 end
-
-
-
-
