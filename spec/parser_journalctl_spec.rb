@@ -34,7 +34,7 @@ describe JournalCtl do
 
   it "should parse nginx numbers as json numbers" do
     assert_keys_in_example(
-      nginx_example(7),
+      nginx_example(1),
       "upstream_connect_time" => 0.001,
       "upstream_response_time" => 0.003,
     )
