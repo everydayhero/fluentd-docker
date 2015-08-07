@@ -1,4 +1,5 @@
 require "json"
+require_relative "nginx_enricher"
 
 Fluent::TextParser.register_template("journalctl", -> { JournalCtl.new })
 
@@ -54,6 +55,8 @@ class JournalCtl < Fluent::Parser
 
       output
     end
+
+    output = NginxEnricher.new.call(output)
 
     if block_given?
       yield time, output

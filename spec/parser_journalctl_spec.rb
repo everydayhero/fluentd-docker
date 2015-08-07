@@ -27,16 +27,16 @@ describe JournalCtl do
   it "should parse nginx - as json null" do
     assert_keys_in_example(
       nginx_example(0),
-      "upstream_connect_time" => "-",
-      "upstream_response_time" => "-",
+      "upstream_connect_time" => nil,
+      "upstream_response_time" => nil,
     )
   end
 
   it "should parse nginx numbers as json numbers" do
     assert_keys_in_example(
       nginx_example(7),
-      "upstream_connect_time" => "0.001",
-      "upstream_response_time" => "0.003",
+      "upstream_connect_time" => 0.001,
+      "upstream_response_time" => 0.003,
     )
   end
 end
