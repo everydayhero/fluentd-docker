@@ -22,5 +22,5 @@ ADD plugins/* /etc/fluent/plugin/
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
-EXPOSE 5170
+EXPOSE 24224 5170
 CMD ["/usr/local/bundle/bin/fluentd", "-c", "/etc/fluent/fluent.conf"]
