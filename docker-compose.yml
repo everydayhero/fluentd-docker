@@ -1,0 +1,3 @@
+test:
+  dockerfile: Dockerfile.rspec
+  build: .
