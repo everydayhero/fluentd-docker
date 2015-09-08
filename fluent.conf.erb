@@ -66,5 +66,11 @@
       time_slice_wait 10m
     </store>
   <% end %>
+
+  <% if ENV["DEBUG"] %>
+    <store>
+      type stdout
+    </store>
+  <% end %>
 </match>
 
