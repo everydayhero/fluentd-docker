@@ -19,56 +19,58 @@
   format everydayhero
 </source>
 
-<% if ENV["KINESIS_STREAM"] %>
-  <match **>
-    type kinesis
+<match **>
+  type copy
+  deep_copy true
 
-    stream_name <%= ENV["KINESIS_STREAM"] %>
+  <% if ENV["KINESIS_STREAM"] %>
+    <store>
+      type kinesis
+      stream_name <%= ENV["KINESIS_STREAM"] %>
+      <% if ENV["AWS_KEY"] %>aws_key_id <%= ENV["AWS_KEY"] %><% end %>
+      <% if ENV["AWS_SECRET"] %>aws_sec_key <%= ENV["AWS_SECRET"] %><% end %>
+      <% if ENV["AWS_REGION"] %>region <%= ENV["AWS_REGION"] %><% end %>
+      random_partition_key true
+      order_events false
+      num_threads 10
+    </store>
+  <% end %>
 
-    <% if ENV["AWS_KEY"] %>aws_key_id <%= ENV["AWS_KEY"] %><% end %>
-    <% if ENV["AWS_SECRET"] %>aws_sec_key <%= ENV["AWS_SECRET"] %><% end %>
+  <% if ENV["ELASTICSEARCH_HOSTS"] %>
+    <store>
+      type elasticsearch
+      logstash_format true
+      hosts <%= ENV["ELASTICSEARCH_HOSTS"] %>
+      flush_interval 10
+    </store>
+  <% elsif ENV["ELASTICSEARCH_HOST"] %>
+    <store>
+      type elasticsearch
+      logstash_format true
+      host <%= ENV["ELASTICSEARCH_HOST"] %>
+      port <%= ENV["ELASTICSEARCH_PORT"] %>
+      flush_interval 10
+    </store>
+  <% end %>
 
-    <% if ENV["AWS_REGION"] %>region <%= ENV["AWS_REGION"] %><% end %>
+  <% if ENV["S3_BUCKET"] %>
+    <store>
+      type s3
+      aws_key_id <%= ENV["AWS_KEY"] %>
+      aws_sec_key <%= ENV["AWS_SECRET"] %>
+      s3_bucket <%= ENV["S3_BUCKET"] %>
+      s3_endpoint <%= ENV["S3_ENDPOINT"] %>
+      path <%= ENV["S3_PATH"] %>
+      buffer_path /tmp
+      time_slice_format %Y-%m-%d/%H
+      time_slice_wait 10m
+    </store>
+  <% end %>
 
-    random_partition_key true
-
-    order_events false
-    num_threads 10
-  </match>
-<% else %>
-  <match **>
-    type copy
-
-    <% if ENV["ELASTICSEARCH_HOSTS"] %>
-      <store>
-        type elasticsearch
-        logstash_format true
-        hosts <%= ENV["ELASTICSEARCH_HOSTS"] %>
-        flush_interval 10
-      </store>
-    <% elsif ENV["ELASTICSEARCH_HOST"] %>
-      <store>
-        type elasticsearch
-        logstash_format true
-        host <%= ENV["ELASTICSEARCH_HOST"] %>
-        port <%= ENV["ELASTICSEARCH_PORT"] %>
-        flush_interval 10
-      </store>
-    <% end %>
-
-    <% if ENV["S3_BUCKET"] %>
-      <store>
-        type s3
-        aws_key_id <%= ENV["AWS_KEY"] %>
-        aws_sec_key <%= ENV["AWS_SECRET"] %>
-        s3_bucket <%= ENV["S3_BUCKET"] %>
-        s3_endpoint <%= ENV["S3_ENDPOINT"] %>
-        path <%= ENV["S3_PATH"] %>
-        buffer_path /tmp
-        time_slice_format %Y-%m-%d/%H
-        time_slice_wait 10m
-      </store>
-    <% end %>
-  </match>
-<% end %>
+  <% if ENV["DEBUG"] %>
+    <store>
+      type stdout
+    </store>
+  <% end %>
+</match>
 
