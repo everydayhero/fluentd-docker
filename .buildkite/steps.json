@@ -1,0 +1,113 @@
+[
+  {
+    "type": "script",
+    "name": "Run rspec",
+    "command": "bin/ci",
+    "artifact_paths": "",
+    "branch_configuration": "",
+    "env": {
+
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": null,
+    "parallelism": null
+  },
+  {
+    "type": "waiter"
+  },
+  {
+    "type": "script",
+    "name": "Build docker image (staging)",
+    "command": "docker build -t \"quay.io/everydayhero/fluentd:staging\" .",
+    "artifact_paths": "",
+    "branch_configuration": "master",
+    "env": {
+
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": null,
+    "parallelism": null
+  },
+  {
+    "type": "waiter"
+  },
+  {
+    "type": "script",
+    "name": "Push new build",
+    "command": "docker push quay.io/everydayhero/fluentd:staging",
+    "artifact_paths": "",
+    "branch_configuration": "master",
+    "env": {
+
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": null,
+    "parallelism": null
+  },
+  {
+    "type": "waiter"
+  },
+  {
+    "type": "script",
+    "name": "Deploy to staging",
+    "command": "plain-utils ansible-playbook $ENVIRONMENT master -l \\!rabbitmq,\\!consul-server,\\!kibana --tags fluentd coreos.yml",
+    "artifact_paths": "",
+    "branch_configuration": "master",
+    "env": {
+      "ENVIRONMENT": "staging"
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": 1,
+    "parallelism": 1
+  },
+  {
+    "type": "manual"
+  },
+  {
+    "type": "script",
+    "name": "Build docker image (production)",
+    "command": "docker build -t \"quay.io/everydayhero/fluentd:production\" .",
+    "artifact_paths": "",
+    "branch_configuration": "master",
+    "env": {
+
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": null,
+    "parallelism": null
+  },
+  {
+    "type": "waiter"
+  },
+  {
+    "type": "script",
+    "name": "Push new build",
+    "command": "docker push quay.io/everydayhero/fluentd:production",
+    "artifact_paths": "",
+    "branch_configuration": "master",
+    "env": {
+
+    },
+    "timeout_in_minutes": null,
+    "agent_query_rules": [
+      "plain_utils=true"
+    ],
+    "concurrency": null,
+    "parallelism": null
+  }
+]
