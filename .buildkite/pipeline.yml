@@ -2,6 +2,9 @@
 
 steps:
   -
+    type: "waiter"
+
+  -
     name: "Run rspec"
     command: "bin/ci"
     agents:
