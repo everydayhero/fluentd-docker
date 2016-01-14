@@ -1,31 +1,29 @@
-# Fluentd-docker
+# fluentd-docker
 
 [![Build status](https://badge.buildkite.com/15ebcb1d9de0f30fda036f632eb7220fcd9ae577498b7e99e8.svg)](https://buildkite.com/everyday-hero/fluentd)
 
-This kicks off the unified log-collector we discussed last week. Currently, it is designed to accept JSON input over TCP, such as that which may be forwarded by [journalctl](http://www.freedesktop.org/software/systemd/man/journalctl.html).
-
-```
-journalctl -o json -f | ncat localhost 5170
-```
-
-Once out of POC stage, we'll want to get this into a unit file of its own. The anticipated complications with this will be around non-root access to the journal, and teaching ncat to ignore connection errors.
-
-To start the forwarder, clone this repo, then build the docker image (it is not yet available in a docker registry). You'll then want to set ENV variables to teach the container some secrets about where to find storage locations. S3, ES and Loggly are currently available.
-
 ```sh
-docker build -t fluentd .
+docker build -t quay.io/everydayhero/fluentd .
 
-docker run \
-  --rm -it \
-  -p 5170:5170 \
-  -p 5140:5140/udp \
-  -e "ELASTICSEARCH_HOST=foo" \
-  -e "ELASTICSEARCH_PORT=foo" \
-  -e "LOGGLY_TOKEN=foo" \
-  -e "AWS_KEY=foo" \
-  -e "AWS_SECRET=foo" \
-  -e "S3_BUCKET=foo" \
-  -e "S3_ENDPOINT=foo" \
-  -e "S3_PATH=foo" \
-  fluentd
+docker run --rm -it \
+  --name fluentd \
+  -e AWS_ACCESS_KEY=AKIAABCDEFGHIJQLMNOP \
+  -e AWS_SECRET_KEY=vby3y8b34b8th15isn0tar3alkey9brv4b \
+  -e AWS_REGION=us-east-1 \
+  -e KINESIS_STREAM=log-stream \
+  -p 24224:24224 \
+  -v `pwd`/fluent.conf:/fluentd/etc/fluent.conf \
+  quay.io/everydayhero/fluentd
+
+docker run -it --rm \
+  --name fluentd-test \
+  --log-driver=fluentd \
+  --log-opt=tag="{{.Name}}.{{.ID}}" \
+  --log-opt=labels=app.name,app.command,app.env \
+  --log-opt=fluentd-tag=docker.{{.ID}} \
+  --label app.name=foo \
+  --label app.command=serve \
+  --label app.env=staging \
+  alpine \
+  date
 ```
