@@ -5,8 +5,8 @@ env:
 steps:
   - wait
 
-  - name: ':docker: :checkered_flag:'
-    command: 'docker build -t "${DOCKER_REPO}:${BUILDKITE_COMMIT} && docker push ${DOCKER_REPO}:${BUILDKITE_COMMIT}"'
+  - name: ":docker: :checkered_flag:"
+    command: "docker build -t \"${DOCKER_REPO}:${BUILDKITE_COMMIT}\" && docker push \"${DOCKER_REPO}:${BUILDKITE_COMMIT}\""
 
   - wait
 
@@ -17,7 +17,7 @@ steps:
 
   - wait
 
-  - name: ':docker: :rocket:'
-    command: 'docker tag -f "${DOCKER_REPO}:${BUILDKITE_COMMIT}" "${DOCKER_REPO}:${DOCKER_TAG}"'
+  - name: ":docker: :rocket:"
+    command: "docker tag -f \"${DOCKER_REPO}:${BUILDKITE_COMMIT}\" \"${DOCKER_REPO}:${DOCKER_TAG}\""
     env:
       DOCKER_TAG: testing
