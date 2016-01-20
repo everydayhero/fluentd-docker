@@ -19,6 +19,12 @@
   format everydayhero
 </source>
 
+<filter journalctl>
+  @type record_transformer
+
+  remove_keys "journalctl.boot_id,journalctl.cap_effective,journalctl.comm,journalctl.cursor,journalctl.exe,journalctl.gid ,journalctl.machine_id,journalctl.monotonic_timestamp,journalctl.pid,journalctl.priority,journalctl.realtime_timestamp,journalctl.syslog_facility,journalctl.syslog_identifier,journalctl.systemd_cgroup,journalctl.systemd_slice,journalctl.uid"
+</filter>
+
 <match **>
   type copy
   deep_copy true
