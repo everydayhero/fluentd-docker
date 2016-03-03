@@ -1,4 +1,4 @@
 #!/bin/bash
 
 docker-compose build
-docker-compose run test rspec
+docker-compose -p "fluentd-${BUILDKITE_JOB_ID//-}" run test rspec

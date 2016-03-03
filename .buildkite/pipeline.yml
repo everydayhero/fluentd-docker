@@ -1,66 +1,54 @@
 # buildkite.yml
 
 steps:
-  -
-    type: "waiter"
 
-  -
-    name: "Run rspec"
+  - type: waiter
+
+  - name: ":rspec:"
     command: "bin/ci"
     agents:
-      - "plain_utils=true"
+      queue: native
 
-  -
-    type: "waiter"
+  - type: waiter
 
-  -
-    name: "Build docker image (staging)"
-    command: "docker build -t \"quay.io/everydayhero/fluentd:staging\" ."
-    branches: "master"
+  - name: ":docker: Build Image"
+    command: bin/build
+    branches: master
     agents:
-      - "plain_utils=true"
+      queue: native
 
-  -
-    type: "waiter"
+  - type: waiter
 
-  -
-    name: "Push new build"
-    command: "docker push quay.io/everydayhero/fluentd:staging"
-    branches: "master"
+  - name: ":docker: Tag Staging"
+    command: bin/tag staging
+    branches: master
     agents:
-      - "plain_utils=true"
+      queue: native
 
-  -
-    type: "waiter"
+  - type: manual
 
-  -
-    name: "Deploy to staging"
-    command: "plain-utils ansible-playbook $ENVIRONMENT master -l \\!rabbitmq,\\!consul-server,\\!kibana --tags fluentd coreos.yml"
-    branches: "master"
-    parallelism: 1
-    concurrency: 1
-    concurrency_group: deploy-staging
+  - name: ":ansible: Deploy"
+    command: "plain-utils ansible-playbook $ENVIRONMENT master bootstrap.yml --tags fluentd"
+    branches: master
     env:
-      ENVIRONMENT: "staging"
+      ENVIRONMENT: staging
     agents:
-      - "plain_utils=true"
+      queue: native
 
-  -
-    type: "manual"
+  - type: manual
 
-  -
-    name: "Build docker image (production)"
-    command: "docker build -t \"quay.io/everydayhero/fluentd:production\" ."
-    branches: "master"
+  - name: ":docker: Tag Production"
+    command: bin/tag production
+    branches: master
     agents:
-      - "plain_utils=true"
+      queue: native
 
-  -
-    type: "waiter"
+  - type: waiter
 
-  -
-    name: "Push new build"
-    command: "docker push quay.io/everydayhero/fluentd:production"
-    branches: "master"
+  - name: ":ansible: Deploy"
+    command: "plain-utils ansible-playbook $ENVIRONMENT master bootstrap.yml --tags fluentd"
+    branches: master
+    env:
+      ENVIRONMENT: production
     agents:
-      - "plain_utils=true"
+      queue: native
