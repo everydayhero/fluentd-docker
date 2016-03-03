@@ -1,30 +1,26 @@
-FROM ruby:2.2.0
-MAINTAINER EverydayHero <edh-dev@everydayhero.com.au>
+FROM fluent/fluentd:latest
+MAINTAINER Everydayhero <edh-dev@everydayhero.com.au>
 
-# See http://docs.fluentd.org/en/articles/before-install
-RUN ulimit -n 65536
-
-RUN apt-get update && apt-get install -y \
-  make \
-  libcurl4-gnutls-dev \
-  && rm -rf /var/lib/apt/lists/*
+USER root
+RUN apk --no-cache --update add ruby-io-console build-base ruby-dev && \
+    rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
 
 RUN gem install \
-    fluent-plugin-s3 \
     fluent-plugin-elasticsearch \
     fluent-plugin-kinesis \
+    fluent-plugin-s3 \
+    fluent-plugin-secure-forward \
+    bundler \
     --no-rdoc --no-ri
 
-RUN mkdir -p /etc/fluent/plugin
-ADD fluent.conf.erb /etc/fluent/
-ADD plugins/* /etc/fluent/plugin/
+EXPOSE 5140
+EXPOSE 5170
+EXPOSE 24224
 
-RUN mkdir /srv/app
-WORKDIR /srv/app/
+RUN mkdir -p /tmp/rspec
+WORKDIR /tmp/rspec
+ADD . /tmp/rspec
 
-ADD Gemfile Gemfile.lock /srv/app/
 RUN bundle install
-
-ADD . /srv/app
 
 CMD ["rspec"]

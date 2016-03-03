@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+COMMIT=$BUILDKITE_COMMIT
+DOCKER_REPOSITORY="quay.io/everydayhero/fluentd"
+
+docker build --pull -t "$DOCKER_TAG:$COMMIT" .
+docker push "$DOCKER_TAG:$COMMIT"
