@@ -2,14 +2,12 @@ FROM fluent/fluentd:latest
 MAINTAINER Everydayhero <edh-dev@everydayhero.com.au>
 
 USER root
-RUN apk --no-cache --update add ruby-io-console build-base ruby-dev && \
-    rm -rf /tmp/* /var/tmp/* /var/cache/apk/*
+
+RUN apk --no-cache --update add ruby-io-console build-base ruby-dev
 
 RUN gem install \
-    fluent-plugin-elasticsearch \
+    fluent-plugin-docker_metadata_filter \
     fluent-plugin-kinesis \
-    fluent-plugin-s3 \
-    fluent-plugin-secure-forward \
     bundler \
     --no-rdoc --no-ri
 

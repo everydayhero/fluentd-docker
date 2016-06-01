@@ -1,21 +1,17 @@
-# buildkite.yml
-
+---
 steps:
-
-  - type: waiter
-
   - name: ":rspec:"
     command: "bin/ci"
     agents:
-      queue: native
+      queue: elastic
 
   - type: waiter
 
   - name: ":docker: Build Image"
     command: bin/build
-    branches: master
     agents:
       queue: native
+      docker: builder
 
   - type: waiter
 
