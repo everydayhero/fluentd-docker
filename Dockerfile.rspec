@@ -1,6 +1,8 @@
 FROM fluent/fluentd:latest
 MAINTAINER Everydayhero <edh-dev@everydayhero.com.au>
 
+USER root
+
 RUN apk --no-cache --update add ruby-io-console build-base ruby-dev
 
 RUN gem install \
