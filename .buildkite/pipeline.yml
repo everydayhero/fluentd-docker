@@ -3,7 +3,7 @@ steps:
   - name: ":rspec:"
     command: "bin/ci"
     agents:
-      docker: builder
+      queue: elastic
 
   - type: waiter
 
@@ -11,7 +11,7 @@ steps:
     command: bin/build
     branches: master
     agents:
-      queue: native
+      docker: builder
 
   - type: waiter
 
