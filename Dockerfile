@@ -2,7 +2,6 @@ FROM fluent/fluentd:latest
 MAINTAINER Everydayhero <edh-dev@everydayhero.com.au>
 
 RUN gem install \
-    fluent-plugin-color-stripper \
     fluent-plugin-docker_metadata_filter \
     fluent-plugin-kinesis \
     --no-rdoc --no-ri

@@ -6,7 +6,6 @@ USER root
 RUN apk --no-cache --update add ruby-io-console build-base ruby-dev
 
 RUN gem install \
-    fluent-plugin-color-stripper \
     fluent-plugin-docker_metadata_filter \
     fluent-plugin-kinesis \
     bundler \
