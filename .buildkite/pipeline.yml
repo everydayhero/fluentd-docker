@@ -3,7 +3,7 @@ steps:
   - name: ":rspec:"
     command: "bin/ci"
     agents:
-      queue: elastic
+      queue: "*"
 
   - type: waiter
 
@@ -20,6 +20,7 @@ steps:
     branches: master
     agents:
       queue: native
+      docker: builder
 
   - type: manual
 
@@ -29,7 +30,7 @@ steps:
     env:
       ENVIRONMENT: staging
     agents:
-      queue: native
+      queue: "*"
 
   - type: manual
 
@@ -38,6 +39,7 @@ steps:
     branches: master
     agents:
       queue: native
+      docker: builder
 
   - type: waiter
 
@@ -47,4 +49,4 @@ steps:
     env:
       ENVIRONMENT: production
     agents:
-      queue: native
+      queue: "*"

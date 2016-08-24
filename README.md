@@ -3,7 +3,7 @@
 [![Build status](https://badge.buildkite.com/15ebcb1d9de0f30fda036f632eb7220fcd9ae577498b7e99e8.svg)](https://buildkite.com/everyday-hero/fluentd)
 
 ```sh
-docker build -t quay.io/eveyrdayhero/fluentd .
+docker build -t everydayhero/fluentd .
 
 docker run -it \
   --rm \
@@ -16,5 +16,5 @@ docker run -it \
   -v /var/lib/docker/containers:/var/lib/docker/containers:ro \
   -v /var/log:/var/log \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  quay.io/eveyrdayhero/fluentd
+  everydayhero/fluentd
 ```
