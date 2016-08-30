@@ -10,7 +10,7 @@ steps:
   - name: ":docker: Build Image"
     command: bin/build
     agents:
-      queue: native
+      queue: "*"
       docker: builder
 
   - type: waiter
@@ -19,7 +19,7 @@ steps:
     command: bin/tag staging
     branches: master
     agents:
-      queue: native
+      queue: "*"
       docker: builder
 
   - type: manual
@@ -38,7 +38,7 @@ steps:
     command: bin/tag production
     branches: master
     agents:
-      queue: native
+      queue: "*"
       docker: builder
 
   - type: waiter
