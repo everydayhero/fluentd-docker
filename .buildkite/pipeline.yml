@@ -3,14 +3,14 @@ steps:
   - name: ":rspec:"
     command: "bin/ci"
     agents:
-      queue: elastic
+      queue: "*"
 
   - type: waiter
 
   - name: ":docker: Build Image"
     command: bin/build
     agents:
-      queue: native
+      queue: "*"
       docker: builder
 
   - type: waiter
@@ -19,7 +19,8 @@ steps:
     command: bin/tag staging
     branches: master
     agents:
-      queue: native
+      queue: "*"
+      docker: builder
 
   - type: manual
 
@@ -29,7 +30,7 @@ steps:
     env:
       ENVIRONMENT: staging
     agents:
-      queue: native
+      queue: "*"
 
   - type: manual
 
@@ -37,7 +38,8 @@ steps:
     command: bin/tag production
     branches: master
     agents:
-      queue: native
+      queue: "*"
+      docker: builder
 
   - type: waiter
 
@@ -47,4 +49,4 @@ steps:
     env:
       ENVIRONMENT: production
     agents:
-      queue: native
+      queue: "*"
