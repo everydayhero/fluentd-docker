@@ -6,6 +6,9 @@ RUN gem install \
     fluent-plugin-kinesis \
     --no-rdoc --no-ri
 
+COPY fluent.conf /fluentd/etc/
+COPY plugins /fluentd/plugins/
+
 EXPOSE 5140
 EXPOSE 5170
 EXPOSE 24224
