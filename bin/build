@@ -5,5 +5,4 @@ set -e
 COMMIT=$BUILDKITE_COMMIT
 DOCKER_REPOSITORY="everydayhero/fluentd"
 
-docker build --pull -t "$DOCKER_REPOSITORY:$COMMIT" .
-docker push "$DOCKER_REPOSITORY:$COMMIT"
+docker build --cache-from "$DOCKER_REPOSITORY:production" --cache-from "$DOCKER_REPOSITORY:$COMMIT" --pull -t "$DOCKER_REPOSITORY:$COMMIT" .

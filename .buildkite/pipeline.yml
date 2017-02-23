@@ -2,25 +2,17 @@
 steps:
   - name: ":rspec:"
     command: "bin/ci"
-    agents:
-      queue: "*"
 
   - type: waiter
 
   - name: ":docker: Build Image"
     command: bin/build
-    agents:
-      queue: "*"
-      docker: builder
 
   - type: waiter
 
   - name: ":docker: Tag Staging"
     command: bin/tag staging
     branches: master
-    agents:
-      queue: "*"
-      docker: builder
 
   - type: manual
 
@@ -29,17 +21,12 @@ steps:
     branches: master
     env:
       ENVIRONMENT: staging
-    agents:
-      queue: "*"
 
   - type: manual
 
   - name: ":docker: Tag Production"
     command: bin/tag production
     branches: master
-    agents:
-      queue: "*"
-      docker: builder
 
   - type: waiter
 
@@ -48,5 +35,3 @@ steps:
     branches: master
     env:
       ENVIRONMENT: production
-    agents:
-      queue: "*"
