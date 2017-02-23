@@ -2,11 +2,8 @@
 
 set -e
 
-COMMIT=$BUILDKITE_COMMIT
-
 DOCKER_TAG=$1
 DOCKER_REPOSITORY="everydayhero/fluentd"
 
-docker pull "${DOCKER_REPOSITORY}:${COMMIT}"
-docker tag "${DOCKER_REPOSITORY}:${COMMIT}" "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
+docker build --cache-from "${DOCKER_REPOSITORY}:${DOCKER_TAG}" --pull "${DOCKER_REPOSITORY}:${DOCKER_TAG}" .
 docker push "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
