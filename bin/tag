@@ -5,5 +5,5 @@ set -e
 DOCKER_TAG=$1
 DOCKER_REPOSITORY="everydayhero/fluentd"
 
-docker build --cache-from "${DOCKER_REPOSITORY}:${DOCKER_TAG}" --pull "${DOCKER_REPOSITORY}:${DOCKER_TAG}" .
+docker build --cache-from "${DOCKER_REPOSITORY}:${DOCKER_TAG}" --pull -t "${DOCKER_REPOSITORY}:${DOCKER_TAG}" .
 docker push "${DOCKER_REPOSITORY}:${DOCKER_TAG}"
