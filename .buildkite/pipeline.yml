@@ -3,18 +3,18 @@ steps:
   - name: ":rspec:"
     command: "bin/ci"
 
-  - type: waiter
+  - wait
 
   - name: ":docker: Build Image"
     command: bin/build
 
-  - type: waiter
+  - wait
 
   - name: ":docker: Tag Staging"
     command: bin/tag staging
     branches: master
 
-  - type: manual
+  - wait
 
   - name: ":ansible: Deploy"
     command: "plain-utils ansible-playbook $ENVIRONMENT master bootstrap.yml --tags fluentd"
@@ -22,13 +22,13 @@ steps:
     env:
       ENVIRONMENT: staging
 
-  - type: manual
+  - block
 
   - name: ":docker: Tag Production"
     command: bin/tag production
     branches: master
 
-  - type: waiter
+  - wait
 
   - name: ":ansible: Deploy"
     command: "plain-utils ansible-playbook $ENVIRONMENT master bootstrap.yml --tags fluentd"
