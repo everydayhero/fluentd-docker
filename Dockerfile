@@ -2,9 +2,11 @@ FROM fluent/fluentd:latest
 MAINTAINER Everydayhero <edh-dev@everydayhero.com.au>
 
 RUN gem install \
-    fluent-plugin-docker_metadata_filter \
-    fluent-plugin-kinesis \
-    --no-rdoc --no-ri
+      fluent-plugin-docker_metadata_filter \
+      fluent-plugin-kinesis \
+      fluent-plugin-cloudwatch-logs \
+      --no-rdoc --no-ri && \
+    gem sources --clear-all
 
 COPY fluent.conf /fluentd/etc/
 COPY plugins /fluentd/plugins/

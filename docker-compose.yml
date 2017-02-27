@@ -1,3 +1,7 @@
 test:
-  dockerfile: Dockerfile.rspec
   build: .
+  entrypoint: /app/bin/prep
+  command: rspec
+  working_dir: /app
+  volumes:
+    - .:/app
