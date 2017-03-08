@@ -3,4 +3,5 @@
 echo "Preparing environment..."
 gem install rspec --no-rdoc --no-ri
 
-rspec
+
+"$@"
