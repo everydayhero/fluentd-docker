@@ -1,3 +1,4 @@
+require 'time'
 require 'fluent/parser'
 require 'fluent/env'
 require 'fluent/time'
@@ -7,6 +8,11 @@ module Fluent
     Plugin.register_parser('audit', self)
 
     ParserError = ::Fluent::ParserError
+
+    def initialize
+      @time_parser = Fluent::TextParser::TimeParser.new('%s')
+      @mutex = Mutex.new
+    end
 
     def parse(text)
       time, record = nil, nil
@@ -30,6 +36,10 @@ module Fluent
       Hash[seperate_fields(text).map(&method(:split_key_from_value))]
     end
 
+    def parse_time(value)
+      @mutex.synchronize{ @time_parser.parse(value) }
+    end
+
     def seperate_fields(text)
       text.split(/\s(?=(?:[^"]|"[^"]*")*$)/)
     end
@@ -44,7 +54,7 @@ module Fluent
       msg = record.delete('msg')
       timestamp = msg.scan(/(?:audit\()(\d+\.\d+)/).flatten.first
       raise ParserError, "Invalid timestamp '#{msg}'" if timestamp.nil?
-      Time.strptime(timestamp, '%s')
+      parse_time(timestamp)
     end
 
     def strip_quotes(text)
